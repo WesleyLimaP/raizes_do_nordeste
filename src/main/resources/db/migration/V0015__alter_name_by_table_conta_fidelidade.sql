@@ -1,0 +1,1 @@
+alter table conta_fidelidade rename to tb_conta_fidelidade
