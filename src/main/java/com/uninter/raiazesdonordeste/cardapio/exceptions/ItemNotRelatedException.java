@@ -1,7 +1,9 @@
 package com.uninter.raiazesdonordeste.cardapio.exceptions;
 
-public class ItemNotRelatedException extends RuntimeException {
-  public ItemNotRelatedException(String message) {
-    super(message);
-  }
+import com.uninter.raiazesdonordeste.core.exceptions.EntityNotRelatedException;
+
+public class ItemNotRelatedException extends EntityNotRelatedException {
+    public ItemNotRelatedException(String message, Long id, Long relatedId) {
+        super(message, id, relatedId);
+    }
 }

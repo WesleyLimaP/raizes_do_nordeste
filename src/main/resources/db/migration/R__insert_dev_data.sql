@@ -50,17 +50,17 @@ INSERT INTO tb_usuario_papel (usuario_id, papel_id) VALUES
 ((SELECT id FROM tb_usuario WHERE login = 'gerente2'), (SELECT id FROM tb_papel WHERE descricao = 'GERENTE'));
 
 -- Produtos
-INSERT INTO tb_produto (nome, descricao, preco_base, categoria, disponibilidade_sazonal) VALUES
-('Baião de Dois', 'Arroz com feijão de corda e queijo coalho', 25.90, 'Pratos Típicos', false),
-('Carne de Sol', 'Carne de sol com macaxeira e paçoca', 32.50, 'Pratos Típicos', false),
-('Sarapatel', 'Prato tradicional nordestino', 28.00, 'Pratos Típicos', false),
-('Acarajé', 'Feijão fradinho frito com vatapá e camarão', 18.90, 'Pratos Típicos', false),
-('Cuscuz', 'Cuscuz de milho com manteiga e queijo', 15.50, 'Pratos Típicos', false),
-('Tapioca', 'Tapioca recheada com queijo e coco', 12.00, 'Lanches', false),
-('Coco Verde', 'Água de coco verde natural', 8.00, 'Bebidas', false),
-('Suco de Caju', 'Suco natural de caju', 10.00, 'Bebidas', false),
-('Bolo de Rolo', 'Bolo de rolo com goiabada', 9.50, 'Sobremesas', false),
-('Cartola', 'Banana frita com queijo e canela', 11.00, 'Sobremesas', false);
+INSERT INTO tb_produto (nome, descricao, preco_base, categoria) VALUES
+('Baião de Dois', 'Arroz com feijão de corda e queijo coalho', 25.90, 'Pratos Típicos'),
+('Carne de Sol', 'Carne de sol com macaxeira e paçoca', 32.50, 'Pratos Típicos'),
+('Sarapatel', 'Prato tradicional nordestino', 28.00, 'Pratos Típicos'),
+('Acarajé', 'Feijão fradinho frito com vatapá e camarão', 18.90, 'Pratos Típicos'),
+('Cuscuz', 'Cuscuz de milho com manteiga e queijo', 15.50, 'Pratos Típicos'),
+('Tapioca', 'Tapioca recheada com queijo e coco', 12.00, 'Lanches'),
+('Coco Verde', 'Água de coco verde natural', 8.00, 'Bebidas'),
+('Suco de Caju', 'Suco natural de caju', 10.00, 'Bebidas'),
+('Bolo de Rolo', 'Bolo de rolo com goiabada', 9.50, 'Sobremesas'),
+('Cartola', 'Banana frita com queijo e canela', 11.00, 'Sobremesas');
 
 -- Cardápios
 INSERT INTO tb_cardapio (vigencia_inicio, vigencia_fim, unidade_id) VALUES
@@ -149,8 +149,8 @@ INSERT INTO tb_campanha_fidelidade (nome, criterio_segmentacao, desconto) VALUES
 
 -- Campanha Fidelidade Cliente
 INSERT INTO tb_campanha_fidelidade_cliente (camapanha_fidelidade_id, cliente_id) VALUES
-((SELECT id FROM tb_campanha_fidelidade WHERE nome = 'Cliente VIP'), (SELECT id FROM tb_cliente WHERE nome = 'Maria Santos')),
-((SELECT id FROM tb_campanha_fidelidade WHERE nome = 'Cliente VIP'), (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa'));
+((SELECT id FROM tb_campanha_fidelidade WHERE nome = 'Cliente VIP' LIMIT 1), (SELECT id FROM tb_cliente WHERE nome = 'Maria Santos' LIMIT 1)),
+((SELECT id FROM tb_campanha_fidelidade WHERE nome = 'Cliente VIP' LIMIT 1), (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa' LIMIT 1));
 
 -- Consentimentos LGPD
 INSERT INTO tb_consentimento_lgpd (cliente_id, tipo_consentimento, revogado, data_consentimento) VALUES

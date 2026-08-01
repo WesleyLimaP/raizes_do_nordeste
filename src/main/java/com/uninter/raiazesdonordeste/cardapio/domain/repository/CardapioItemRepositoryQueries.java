@@ -2,12 +2,10 @@ package com.uninter.raiazesdonordeste.cardapio.domain.repository;
 
 import com.uninter.raiazesdonordeste.cardapio.domain.model.CardapioItem;
 
-import java.util.List;
-
-public interface CardapioItemQuery {
+public interface CardapioItemRepositoryQueries {
 
     CardapioItem saveItem(CardapioItem cardapioItem);
-    void deleteItem(Long id);
+    void deleteItem(CardapioItem item);
 
 
 }

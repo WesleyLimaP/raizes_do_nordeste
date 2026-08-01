@@ -1,7 +1,9 @@
 package com.uninter.raiazesdonordeste.unidade.exceptions;
 
-public class UnidadeNotFoundException extends RuntimeException {
-  public UnidadeNotFoundException(String message) {
-    super(message);
-  }
+import com.uninter.raiazesdonordeste.core.exceptions.EntityNotFoundException;
+
+public class UnidadeNotFoundException extends EntityNotFoundException {
+    public UnidadeNotFoundException(String message) {
+        super(message);
+    }
 }

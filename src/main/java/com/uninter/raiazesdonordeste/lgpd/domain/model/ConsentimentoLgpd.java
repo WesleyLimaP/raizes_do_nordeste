@@ -1,6 +1,8 @@
 package com.uninter.raiazesdonordeste.lgpd.domain.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
@@ -10,6 +12,7 @@ import java.time.LocalDate;
 @Entity
 public class ConsentimentoLgpd {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long clienteId;
     private String tipoConsentimento;

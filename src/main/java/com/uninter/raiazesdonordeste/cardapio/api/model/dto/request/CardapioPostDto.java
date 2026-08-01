@@ -1,6 +1,7 @@
 package com.uninter.raiazesdonordeste.cardapio.api.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.uninter.raiazesdonordeste.core.exceptions.InvalidDateRangeException;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class CardapioPostRequestDto {
+public class CardapioPostDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @FutureOrPresent
     private LocalDate vigenciaInicio;
@@ -17,12 +18,9 @@ public class CardapioPostRequestDto {
     private LocalDate vigenciaFim;
     private final Long unidadeId;
 
-    public CardapioPostRequestDto(Long unidadeId, LocalDate vigenciaInicio, LocalDate vigenciaFim) {
+    public CardapioPostDto(Long unidadeId, LocalDate vigenciaInicio, LocalDate vigenciaFim) {
         this.unidadeId = unidadeId;
         this.vigenciaInicio = vigenciaInicio;
-        if(vigenciaFim.isBefore(vigenciaInicio)){
-            throw new IllegalArgumentException("A data de fim deve ser maior que a data de inicio");
-        }
         this.vigenciaFim = vigenciaFim;
     }
 }
