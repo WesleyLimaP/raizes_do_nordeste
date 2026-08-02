@@ -105,11 +105,11 @@ public class CardapioService {
 
     @Transactional
     public CardapioItemResponseDto saveItem(Long cardapioId, CardapioItemPostDto request) {
-        getCardapioOrElseThrow(cardapioId);
+        Cardapio cardapio = getCardapioOrElseThrow(cardapioId);
         getProdutoRelatedOrElseThrow(cardapioId, request);
         CardapioItem cardapioItem = cardapioItemMapper.toEntity(request, cardapioId);
         cardapioItem = cardapioRepository.saveItem(cardapioItem);
-        eventPublisher.publishEvent(new CardapioItemCriadoEvent(cardapioId, request.produtoId()));
+        eventPublisher.publishEvent(new CardapioItemCriadoEvent(cardapio.getUnidadeId(), request.produtoId()));
         return cardapioItemMapper.toModel(cardapioItem);
     }
 

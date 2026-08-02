@@ -41,7 +41,8 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoMaxDto);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         produtoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

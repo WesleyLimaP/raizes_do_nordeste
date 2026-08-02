@@ -3,7 +3,6 @@ package com.uninter.raiazesdonordeste.estoque.api.controller;
 import com.uninter.raiazesdonordeste.estoque.api.model.dto.EstoqueMovimentacaoDto;
 import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueDto;
 import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueMinDto;
-import com.uninter.raiazesdonordeste.estoque.domain.model.Estoque;
 import com.uninter.raiazesdonordeste.estoque.domain.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,29 +41,15 @@ public class EstoqueController {
     }
 
 
-    @PutMapping("/unidades/{unidadeId}/produtos/{produtoId}/entrada")
+    @PostMapping("/unidades/{unidadeId}/produtos/{produtoId}/movimentacoes/entrada")
     public ResponseEntity<EstoqueDto> entrada(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
         var response = estoqueService.updateQuantidadeAtualEntrada(unidadeId, produtoId, estoque);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}/entrada")
-    public ResponseEntity<EstoqueDto> entrada(@PathVariable Long id, @RequestBody EstoqueMovimentacaoDto estoque) {
-        var response = estoqueService.updateQuantidadeAtualEntrada(id, estoque);
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping("/unidades/{unidadeId}/produtos/{produtoId}/saida")
+    @PostMapping("/unidades/{unidadeId}/produtos/{produtoId}/movimentacoes/saida")
     public ResponseEntity<EstoqueDto> saida(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
         var response = estoqueService.updateQuantidadeAtualSaida(unidadeId, produtoId, estoque);
         return ResponseEntity.ok(response);
     }
-
-    @PutMapping("/{id}/saida")
-    public ResponseEntity<EstoqueDto> saida(@PathVariable Long id, @RequestBody EstoqueMovimentacaoDto estoque) {
-        var response = estoqueService.updateQuantidadeAtualSaida(id, estoque);
-        return ResponseEntity.ok(response);
-    }
-
-
 }

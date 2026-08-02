@@ -46,8 +46,9 @@ public class CardapioController {
         return ResponseEntity.ok().body(response);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         cardapioService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -65,8 +66,9 @@ public class CardapioController {
         return ResponseEntity.created(uri).body(response);
     }
     @DeleteMapping("/{cardapioId}/items/{id}")
-    public void deleteItem(@PathVariable Long cardapioId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable Long cardapioId, @PathVariable Long id) {
         cardapioService.deleteItem(cardapioId, id);
+        return ResponseEntity.noContent().build();
     }
     @GetMapping("/{cardapioId}/items/{cardapioItemId}")
     public ResponseEntity<CardapioItemResponseDto> findItemById(@PathVariable Long cardapioId, @PathVariable Long cardapioItemId) {
@@ -77,11 +79,13 @@ public class CardapioController {
         return ResponseEntity.ok().body(cardapioService.updateItem(cardapioId, id, precoLocal));
     }
     @PutMapping("/{cardapioId}/items/{id}/disponivel")
-    public void updateDisponibilidade(@PathVariable Long cardapioId, @PathVariable Long id) {
+    public ResponseEntity<Void> updateDisponibilidade(@PathVariable Long cardapioId, @PathVariable Long id) {
          cardapioService.disponibilizarItem(cardapioId, id);
+         return ResponseEntity.noContent().build();
     }
     @PutMapping("/{cardapioId}/items/{id}/indisponivel")
-    public void updateIndisponibilidade(@PathVariable Long cardapioId, @PathVariable Long id) {
+    public ResponseEntity<Void> updateIndisponibilidade(@PathVariable Long cardapioId, @PathVariable Long id) {
          cardapioService.indisponibilizarItem(cardapioId, id);
+         return ResponseEntity.noContent().build();
     }
 }

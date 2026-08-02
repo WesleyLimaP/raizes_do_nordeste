@@ -1,11 +1,8 @@
 package com.uninter.raiazesdonordeste.unidade.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,4 +15,8 @@ public class Unidade {
     private String endereco;
     private String regiao;
     private String tipoCozinha;
+    @Transient
+    private List<Long> cardapiosIds;
+    @Transient
+    private List<Long> usuariosIds;
 }
