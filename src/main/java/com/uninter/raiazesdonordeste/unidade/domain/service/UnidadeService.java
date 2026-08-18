@@ -1,7 +1,6 @@
 package com.uninter.raiazesdonordeste.unidade.domain.service;
 
 import com.uninter.raiazesdonordeste.cardapio.api.app.CardapioFacade;
-import com.uninter.raiazesdonordeste.cardapio.api.app.dto.share.CardapioItemUnidadeDto;
 import com.uninter.raiazesdonordeste.cardapio.exceptions.CardapioNotFoundException;
 import com.uninter.raiazesdonordeste.unidade.api.model.dto.*;
 import com.uninter.raiazesdonordeste.unidade.api.model.mapper.UnidadeApiMapper;
@@ -9,6 +8,8 @@ import com.uninter.raiazesdonordeste.unidade.domain.model.Unidade;
 import com.uninter.raiazesdonordeste.unidade.domain.repository.UnidadeRepository;
 import com.uninter.raiazesdonordeste.unidade.exceptions.UnidadeNotFoundException;
 import com.uninter.raiazesdonordeste.usuario.api.app.UsuarioFacade;
+import com.uninter.raiazesdonordeste.usuario.api.app.dto.share.UsuarioUnidadeDto;
+import com.uninter.raiazesdonordeste.usuario.exceptions.UsuarioNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,27 +67,29 @@ public class UnidadeService {
     }
 
     @Transactional(readOnly = true)
-    public List<CardapioUnidadeResumoDto> findCardapios(Long unidadeId) {
-        var dto = cardapioFacade.findAllByCardapioId(unidadeId);
-        return dto.stream().map(cardapio -> new CardapioUnidadeResumoDto(
-                cardapio.getId(),
-                cardapio.getVigenciaInicio(),
-                cardapio.getVigenciaFim()
-        )).toList();
+    public List<CardapioUnidadeResumoDto> findCardapiosDaUnidade(Long unidadeId) {
+        return cardapioFacade.findCardapiosDaUnidade(unidadeId);
     }
+
     @Transactional(readOnly = true)
-    public CardapioUnidadeMaxDto findCardapiosById(Long unidadeId, Long cardapioId) {
-        var entity = cardapioFacade.findByIdAndUnidadeId(unidadeId, cardapioId)
+    public CardapioUnidadeMaxDto findCardapioDaUnidade(Long unidadeId, Long cardapioId) {
+        return cardapioFacade.findCardapioDaUnidade(unidadeId, cardapioId)
                 .orElseThrow(() -> new CardapioNotFoundException
                         ("Cardapio nao encontrado com id: " + cardapioId));
-        return new CardapioUnidadeMaxDto(
-                entity.getId(),
-                entity.getVigenciaInicio(),
-                entity.getVigenciaFim(),
-                cardapioFacade.toModelItemCardapio(entity.getItems())
-        );
 
     }
 
+    @Transactional(readOnly = true)
+    public List<UsuarioUnidadeDto> findUsuariosDaUnidade(Long unidadeId) {
+        return usuarioFacade.findUsuariosDaUnidade(unidadeId);
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioUnidadeDto findUsuarioDaUnidade(Long unidadeId, Long usuarioId) {
+        return usuarioFacade.findUsuarioDaUnidade(unidadeId, usuarioId)
+                .orElseThrow(() -> new UsuarioNotFoundException
+                        ("Usuario nao encontrado com id: " + usuarioId));
+
+    }
 
 }

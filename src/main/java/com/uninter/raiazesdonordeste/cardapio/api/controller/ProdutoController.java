@@ -4,7 +4,6 @@ import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoMaxDt
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoPostDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoResumoDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoUpdateDto;
-import com.uninter.raiazesdonordeste.cardapio.domain.model.Produto;
 import com.uninter.raiazesdonordeste.cardapio.domain.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

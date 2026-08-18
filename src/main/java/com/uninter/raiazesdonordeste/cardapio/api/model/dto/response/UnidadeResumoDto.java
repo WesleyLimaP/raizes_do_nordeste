@@ -1,7 +1,8 @@
 package com.uninter.raiazesdonordeste.cardapio.api.model.dto.response;
 
-public record CardapioResponseMinDto(
+public record UnidadeResumoDto(
         Long id,
-        Long unidadeId
+        String nome
 ) {
+
 }

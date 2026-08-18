@@ -3,6 +3,7 @@ package com.uninter.raiazesdonordeste.unidade.api.controller;
 import com.uninter.raiazesdonordeste.cardapio.api.Util.UriBuilder;
 import com.uninter.raiazesdonordeste.unidade.api.model.dto.*;
 import com.uninter.raiazesdonordeste.unidade.domain.service.UnidadeService;
+import com.uninter.raiazesdonordeste.usuario.api.app.dto.share.UsuarioUnidadeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,15 +53,28 @@ public class UnidadeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/cardapios")
-    public ResponseEntity<List<CardapioUnidadeResumoDto>> findCardapiosByUnidadeId(@PathVariable Long id) {
-        var cardapiosDto = unidadeService.findCardapios(id);
+    @GetMapping("/{unidadeId}/cardapios")
+    public ResponseEntity<List<CardapioUnidadeResumoDto>> findCardapiosDaUnidade(@PathVariable Long unidadeId) {
+        var cardapiosDto = unidadeService.findCardapiosDaUnidade(unidadeId);
         return ResponseEntity.ok(cardapiosDto);
     }
-    @GetMapping("/{id}/cardapios/{cardapioId}")
-    public ResponseEntity<CardapioUnidadeMaxDto> findCardapioByIdAndUnidadeId(@PathVariable Long id, @PathVariable Long cardapioId) {
-        var cardapiosDto = unidadeService.findCardapiosById(id, cardapioId);
-        return ResponseEntity.ok(cardapiosDto);
+
+    @GetMapping("/{unidadeId}/cardapios/{cardapioId}")
+    public ResponseEntity<CardapioUnidadeMaxDto> findCardapioDaUnidade(@PathVariable Long unidadeId, @PathVariable Long cardapioId) {
+        var cardapioDto = unidadeService.findCardapioDaUnidade(unidadeId, cardapioId);
+        return ResponseEntity.ok(cardapioDto);
+    }
+
+    @GetMapping("/{unidadeId}/usuarios")
+    public ResponseEntity<List<UsuarioUnidadeDto>> findUsuariosDaUnidade(@PathVariable Long unidadeId) {
+        var usuariosDto = unidadeService.findUsuariosDaUnidade(unidadeId);
+        return ResponseEntity.ok(usuariosDto);
+    }
+
+    @GetMapping("/{unidadeId}/usuarios/{usuarioId}")
+    public ResponseEntity<UsuarioUnidadeDto> findUsuarioDaUnidade(@PathVariable Long unidadeId, @PathVariable Long usuarioId) {
+        var usuarioDto = unidadeService.findUsuarioDaUnidade(unidadeId, usuarioId);
+        return ResponseEntity.ok(usuarioDto);
     }
 
 

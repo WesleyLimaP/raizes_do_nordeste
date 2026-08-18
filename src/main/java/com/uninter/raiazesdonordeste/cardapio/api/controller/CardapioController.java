@@ -4,11 +4,11 @@ import com.uninter.raiazesdonordeste.cardapio.api.Util.UriBuilder;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.ItemPrecoLocalDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioItemPostDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioUpdateDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemResponseDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResponseMinDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemResumoDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemMaxDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResumoDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioPostDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResponseDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioMaxDto;
 import com.uninter.raiazesdonordeste.cardapio.domain.service.CardapioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +25,23 @@ public class CardapioController {
 
 
     @GetMapping
-    public ResponseEntity<List<CardapioResponseMinDto>> findAll() {
+    public ResponseEntity<List<CardapioResumoDto>> findAll() {
         return ResponseEntity.ok().body(cardapioService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CardapioResponseDto> findById(@PathVariable Long id) {
-        CardapioResponseDto cardapio = cardapioService.findById(id);
+    public ResponseEntity<CardapioMaxDto> findById(@PathVariable Long id) {
+        CardapioMaxDto cardapio = cardapioService.findById(id);
         return ResponseEntity.ok(cardapio);
     }
     @PostMapping
-    public ResponseEntity<CardapioResponseDto> save(@RequestBody @Valid CardapioPostDto cardapio) {
-        CardapioResponseDto cardapioResponseDto = cardapioService.save(cardapio);
-        var uri = UriBuilder.create(cardapioResponseDto.id());
-        return ResponseEntity.created(uri).body(cardapioResponseDto);
+    public ResponseEntity<CardapioMaxDto> save(@RequestBody @Valid CardapioPostDto cardapio) {
+        CardapioMaxDto cardapioMaxDto = cardapioService.save(cardapio);
+        var uri = UriBuilder.create(cardapioMaxDto.id());
+        return ResponseEntity.created(uri).body(cardapioMaxDto);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<CardapioResponseDto> update(@PathVariable Long id, @Valid @RequestBody CardapioUpdateDto cardapio) {
+    public ResponseEntity<CardapioMaxDto> update(@PathVariable Long id, @Valid @RequestBody CardapioUpdateDto cardapio) {
         var response = cardapioService.update(id, cardapio);
         return ResponseEntity.ok().body(response);
     }
@@ -56,11 +56,11 @@ public class CardapioController {
      * recursos de items de cardapio -----------------------------------------------------------------
      */
     @GetMapping("/{cardapioId}/items")
-    public ResponseEntity<List<CardapioItemDto>> findItems(@PathVariable Long cardapioId) {
+    public ResponseEntity<List<CardapioItemResumoDto>> findItems(@PathVariable Long cardapioId) {
         return ResponseEntity.ok().body(cardapioService.findByItems(cardapioId));
     }
     @PostMapping("/{cardapioId}/items")
-    public ResponseEntity<CardapioItemResponseDto> saveItem(@PathVariable Long cardapioId, @RequestBody CardapioItemPostDto request) {
+    public ResponseEntity<CardapioItemMaxDto> saveItem(@PathVariable Long cardapioId, @RequestBody CardapioItemPostDto request) {
         var response = cardapioService.saveItem(cardapioId, request);
         var uri = UriBuilder.create(response.id());
         return ResponseEntity.created(uri).body(response);
@@ -71,11 +71,11 @@ public class CardapioController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/{cardapioId}/items/{cardapioItemId}")
-    public ResponseEntity<CardapioItemResponseDto> findItemById(@PathVariable Long cardapioId, @PathVariable Long cardapioItemId) {
+    public ResponseEntity<CardapioItemMaxDto> findItemById(@PathVariable Long cardapioId, @PathVariable Long cardapioItemId) {
         return ResponseEntity.ok().body(cardapioService.findItemById(cardapioId, cardapioItemId));
     }
     @PutMapping("/{cardapioId}/items/{id}")
-    public ResponseEntity<CardapioItemResponseDto> updateItem(@PathVariable Long cardapioId, @PathVariable Long id, @RequestBody ItemPrecoLocalDto precoLocal) {
+    public ResponseEntity<CardapioItemMaxDto> updateItem(@PathVariable Long cardapioId, @PathVariable Long id, @RequestBody ItemPrecoLocalDto precoLocal) {
         return ResponseEntity.ok().body(cardapioService.updateItem(cardapioId, id, precoLocal));
     }
     @PutMapping("/{cardapioId}/items/{id}/disponivel")

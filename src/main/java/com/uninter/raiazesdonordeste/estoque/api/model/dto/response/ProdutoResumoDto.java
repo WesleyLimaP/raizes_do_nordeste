@@ -1,4 +1,4 @@
 package com.uninter.raiazesdonordeste.estoque.api.model.dto.response;
 
-public record ProdutoMinDto(Long id, String nome) {
+public record ProdutoResumoDto(Long id, String nome) {
 }

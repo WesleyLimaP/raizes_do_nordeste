@@ -3,11 +3,11 @@ package com.uninter.raiazesdonordeste.cardapio.domain.service;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.ItemPrecoLocalDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioUpdateDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioItemPostDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResponseMinDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemResumoDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResumoDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.request.CardapioPostDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioResponseDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemResponseDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioMaxDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemMaxDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.mapper.CardapioItemMapper;
 import com.uninter.raiazesdonordeste.cardapio.api.model.mapper.CardapioMapper;
 import com.uninter.raiazesdonordeste.cardapio.domain.events.CardapioItemCriadoEvent;
@@ -47,19 +47,19 @@ public class CardapioService {
     private ApplicationEventPublisher eventPublisher;
 
     @Transactional(readOnly = true)
-    public List<CardapioResponseMinDto> findAll() {
+    public List<CardapioResumoDto> findAll() {
         var cardapios = cardapioRepository.findAll();
         return cardapioMapper.toCollectionModel(cardapios);
     }
 
     @Transactional(readOnly = true)
-    public CardapioResponseDto findById(Long id) {
+    public CardapioMaxDto findById(Long id) {
         Cardapio cardapio = getCardapioOrElseThrow(id);
         return cardapioMapper.toModel(cardapio, unidadeFacade.findById(cardapio.getUnidadeId()).get());
     }
 
     @Transactional
-    public CardapioResponseDto save(CardapioPostDto request) {
+    public CardapioMaxDto save(CardapioPostDto request) {
         IsvalidRangeDate(request, null);
         Cardapio cardapio = cardapioMapper.toEntity(request);
         var unidade = unidadeFacade.findById(request.getUnidadeId()).orElseThrow(() -> new UnidadeNotFoundException("unidade de id: "+request.getUnidadeId() + " não encontrada"));
@@ -82,7 +82,7 @@ public class CardapioService {
     }
 
     @Transactional
-    public CardapioResponseDto update(Long id, CardapioUpdateDto request) {
+    public CardapioMaxDto update(Long id, CardapioUpdateDto request) {
         Cardapio cardapio = getCardapioOrElseThrow(id);
         IsvalidRangeDate(null, request);
         cardapio.setVigenciaInicio(request.vigenciaInicio());
@@ -97,14 +97,14 @@ public class CardapioService {
     }
 
     @Transactional(readOnly = true)
-    public List<CardapioItemDto> findByItems(Long cardapioId) {
+    public List<CardapioItemResumoDto> findByItems(Long cardapioId) {
         getCardapioOrElseThrow(cardapioId);
         var itemEntity = cardapioRepository.findItemsByCardapioId(cardapioId);
         return cardapioItemMapper.toCollectionModel(itemEntity);
     }
 
     @Transactional
-    public CardapioItemResponseDto saveItem(Long cardapioId, CardapioItemPostDto request) {
+    public CardapioItemMaxDto saveItem(Long cardapioId, CardapioItemPostDto request) {
         Cardapio cardapio = getCardapioOrElseThrow(cardapioId);
         getProdutoRelatedOrElseThrow(cardapioId, request);
         CardapioItem cardapioItem = cardapioItemMapper.toEntity(request, cardapioId);
@@ -128,7 +128,7 @@ public class CardapioService {
     }
 
     @Transactional(readOnly = true)
-    public CardapioItemResponseDto findItemById(Long cardapioId, Long cardapioItemId) {
+    public CardapioItemMaxDto findItemById(Long cardapioId, Long cardapioItemId) {
         getCardapioOrElseThrow(cardapioId);
        var item = getItemRelatedOrElseThrow(cardapioId, cardapioItemId);
        return cardapioItemMapper.toModel(item);
@@ -160,7 +160,7 @@ public class CardapioService {
         item.setDisponivel(false);
     }
     @Transactional
-    public CardapioItemResponseDto updateItem(Long cardapioId, Long id, ItemPrecoLocalDto cardapioItem) {
+    public CardapioItemMaxDto updateItem(Long cardapioId, Long id, ItemPrecoLocalDto cardapioItem) {
         var cardapio = getCardapioOrElseThrow(cardapioId);
         var items = cardapio.getItems()
                 .stream()

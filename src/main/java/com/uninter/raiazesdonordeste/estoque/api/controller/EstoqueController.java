@@ -1,8 +1,8 @@
 package com.uninter.raiazesdonordeste.estoque.api.controller;
 
 import com.uninter.raiazesdonordeste.estoque.api.model.dto.EstoqueMovimentacaoDto;
-import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueDto;
-import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueMinDto;
+import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueMaxDto;
+import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueResumoDto;
 import com.uninter.raiazesdonordeste.estoque.domain.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,37 +18,37 @@ public class EstoqueController {
 
 
     @GetMapping
-    public ResponseEntity<List<EstoqueMinDto>> findAll() {
-        List<EstoqueMinDto> estoques = estoqueService.findAll();
+    public ResponseEntity<List<EstoqueResumoDto>> findAll() {
+        List<EstoqueResumoDto> estoques = estoqueService.findAll();
         return ResponseEntity.ok(estoques);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstoqueDto> findById(@PathVariable Long id) {
+    public ResponseEntity<EstoqueMaxDto> findById(@PathVariable Long id) {
         var estoqueDto = estoqueService.findById(id);
         return ResponseEntity.ok(estoqueDto);
     }
 
     @GetMapping("/unidades/{unidadeId}/produtos/{produtoId}")
-    public ResponseEntity<EstoqueDto> findByUnidadeAndProduto(@PathVariable Long unidadeId, @PathVariable Long produtoId) {
+    public ResponseEntity<EstoqueMaxDto> findByUnidadeAndProduto(@PathVariable Long unidadeId, @PathVariable Long produtoId) {
         var estoqueDto = estoqueService.findById(unidadeId, produtoId);
         return ResponseEntity.ok(estoqueDto);
     }
     @GetMapping("/unidades/{unidadeId}/produtos")
-    public ResponseEntity<List<EstoqueMinDto>> findAllByUnidade(@PathVariable Long unidadeId) {
+    public ResponseEntity<List<EstoqueResumoDto>> findAllByUnidade(@PathVariable Long unidadeId) {
         var estoqueDto = estoqueService.findAllByUnidade(unidadeId);
         return ResponseEntity.ok(estoqueDto);
     }
 
 
     @PostMapping("/unidades/{unidadeId}/produtos/{produtoId}/movimentacoes/entrada")
-    public ResponseEntity<EstoqueDto> entrada(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
+    public ResponseEntity<EstoqueMaxDto> entrada(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
         var response = estoqueService.updateQuantidadeAtualEntrada(unidadeId, produtoId, estoque);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/unidades/{unidadeId}/produtos/{produtoId}/movimentacoes/saida")
-    public ResponseEntity<EstoqueDto> saida(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
+    public ResponseEntity<EstoqueMaxDto> saida(@PathVariable Long unidadeId, @PathVariable Long produtoId, @RequestBody EstoqueMovimentacaoDto estoque) {
         var response = estoqueService.updateQuantidadeAtualSaida(unidadeId, produtoId, estoque);
         return ResponseEntity.ok(response);
     }

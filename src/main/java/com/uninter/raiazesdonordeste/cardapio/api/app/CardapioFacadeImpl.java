@@ -1,11 +1,9 @@
 package com.uninter.raiazesdonordeste.cardapio.api.app;
 
-import com.uninter.raiazesdonordeste.cardapio.api.app.dto.share.CardapioItemUnidadeDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.CardapioItemResponseDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.mapper.CardapioItemMapper;
-import com.uninter.raiazesdonordeste.cardapio.domain.model.Cardapio;
-import com.uninter.raiazesdonordeste.cardapio.domain.model.CardapioItem;
 import com.uninter.raiazesdonordeste.cardapio.domain.repository.CardapioRepository;
+import com.uninter.raiazesdonordeste.unidade.api.model.dto.CardapioUnidadeMaxDto;
+import com.uninter.raiazesdonordeste.unidade.api.model.dto.CardapioUnidadeResumoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +18,25 @@ public class CardapioFacadeImpl implements CardapioFacade {
     private CardapioItemMapper cardapioItemMapper;
 
     @Override
-    public List<Cardapio> findAllByCardapioId(Long id) {
-        return cardapioRepository.findAllByUnidadeId(id);
+    public List<CardapioUnidadeResumoDto> findCardapiosDaUnidade(Long unidadeId) {
+        return cardapioRepository.findAllByUnidadeId(unidadeId)
+                .stream()
+                .map(cardapio -> new CardapioUnidadeResumoDto(
+                        cardapio.getId(),
+                        cardapio.getVigenciaInicio(),
+                        cardapio.getVigenciaFim()
+                ))
+                .toList();
     }
 
     @Override
-    public Optional<Cardapio> findByIdAndUnidadeId(Long unidadeId, Long cardapioId) {
-        return cardapioRepository.findByUnidadeIdAndId(unidadeId, cardapioId);
-    }
-
-    @Override
-    public List<CardapioItemUnidadeDto> toModelItemCardapio(List<CardapioItem> cardapioItem) {
-        return cardapioItemMapper.toCollectionModelItemCardapio(cardapioItem);
+    public Optional<CardapioUnidadeMaxDto> findCardapioDaUnidade(Long unidadeId, Long cardapioId) {
+        return cardapioRepository.findByUnidadeIdAndId(unidadeId, cardapioId)
+                .map(cardapio -> new CardapioUnidadeMaxDto(
+                        cardapio.getId(),
+                        cardapio.getVigenciaInicio(),
+                        cardapio.getVigenciaFim(),
+                        cardapioItemMapper.toCollectionModelItemCardapio(cardapio.getItems())
+                ));
     }
 }

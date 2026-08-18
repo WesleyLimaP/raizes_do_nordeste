@@ -1,8 +1,8 @@
 package com.uninter.raiazesdonordeste.cardapio.api.model.dto.response;
 
-public record CardapioItemResponseDto(
+public record CardapioItemMaxDto(
         Long id,
         Double precoLocal,
         boolean disponivel,
-        ProdutoDto produto){
+        ProdutoCardapioResumoDto produto){
 }

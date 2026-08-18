@@ -4,7 +4,7 @@ import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoMaxDt
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoPostDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoResumoDto;
 import com.uninter.raiazesdonordeste.cardapio.api.model.dto.produto.ProdutoUpdateDto;
-import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.ProdutoDto;
+import com.uninter.raiazesdonordeste.cardapio.api.model.dto.response.ProdutoCardapioResumoDto;
 import com.uninter.raiazesdonordeste.cardapio.domain.model.Produto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

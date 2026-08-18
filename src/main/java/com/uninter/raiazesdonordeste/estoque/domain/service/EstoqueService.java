@@ -1,8 +1,8 @@
 package com.uninter.raiazesdonordeste.estoque.domain.service;
 
 import com.uninter.raiazesdonordeste.estoque.api.model.dto.EstoqueMovimentacaoDto;
-import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueDto;
-import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueMinDto;
+import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueMaxDto;
+import com.uninter.raiazesdonordeste.estoque.api.model.dto.response.EstoqueResumoDto;
 import com.uninter.raiazesdonordeste.estoque.api.model.mapper.EstoqueMapper;
 import com.uninter.raiazesdonordeste.estoque.domain.model.Estoque;
 import com.uninter.raiazesdonordeste.estoque.domain.repository.EstoqueRepository;
@@ -23,19 +23,19 @@ public class EstoqueService {
 
 
     @Transactional(readOnly = true)
-    public List<EstoqueMinDto> findAll() {
+    public List<EstoqueResumoDto> findAll() {
         var estoque = estoqueRepository.findAll();
         return estoqueMapper.toCollectionModel(estoque);
     }
 
     @Transactional(readOnly = true)
-    public EstoqueDto findById(Long id) {
+    public EstoqueMaxDto findById(Long id) {
         var estoque = findByIdOrElseThrow(id);
         return estoqueMapper.toModel(estoque);
     }
 
     @Transactional(readOnly = true)
-    public EstoqueDto findById(Long unidadeId, Long produtoId) {
+    public EstoqueMaxDto findById(Long unidadeId, Long produtoId) {
         var estoque = findByUnidadeIdAndProdutoIdOrElseThrow(unidadeId, produtoId);
         return estoqueMapper.toModel(estoque);
     }
@@ -54,41 +54,41 @@ public class EstoqueService {
     }
 
     @Transactional
-    public EstoqueDto updateQuantidadeAtualEntrada(Long unidadeId, Long produtoId, EstoqueMovimentacaoDto request) {
+    public EstoqueMaxDto updateQuantidadeAtualEntrada(Long unidadeId, Long produtoId, EstoqueMovimentacaoDto request) {
         var estoque = findByUnidadeIdAndProdutoIdOrElseThrow(unidadeId, produtoId);
         return adicionarQuantidade(estoque, request.quantidade());
     }
 
     @Transactional
-    public EstoqueDto updateQuantidadeAtualEntrada(Long id, EstoqueMovimentacaoDto request) {
+    public EstoqueMaxDto updateQuantidadeAtualEntrada(Long id, EstoqueMovimentacaoDto request) {
         var estoque = findByIdOrElseThrow(id);
         return adicionarQuantidade(estoque, request.quantidade());
     }
 
     @Transactional
-    public EstoqueDto updateQuantidadeAtualSaida(Long unidadeId, Long produtoId, EstoqueMovimentacaoDto request) {
+    public EstoqueMaxDto updateQuantidadeAtualSaida(Long unidadeId, Long produtoId, EstoqueMovimentacaoDto request) {
         var estoque = findByUnidadeIdAndProdutoIdOrElseThrow(unidadeId, produtoId);
         return removerQuantidade(estoque, request.quantidade());
     }
 
     @Transactional
-    public EstoqueDto updateQuantidadeAtualSaida(Long id, EstoqueMovimentacaoDto request) {
+    public EstoqueMaxDto updateQuantidadeAtualSaida(Long id, EstoqueMovimentacaoDto request) {
         var estoque = findByIdOrElseThrow(id);
         return removerQuantidade(estoque, request.quantidade());
     }
 
-    private EstoqueDto adicionarQuantidade(Estoque estoque, Integer quantidade) {
+    private EstoqueMaxDto adicionarQuantidade(Estoque estoque, Integer quantidade) {
         estoque.setQuantidadeAtual(estoque.getQuantidadeAtual() + quantidade);
         return estoqueMapper.toModel(estoque);
     }
 
-    private EstoqueDto removerQuantidade(Estoque estoque, Integer quantidade) {
+    private EstoqueMaxDto removerQuantidade(Estoque estoque, Integer quantidade) {
         estoque.setQuantidadeAtual(estoque.getQuantidadeAtual() - quantidade);
         return estoqueMapper.toModel(estoque);
     }
 
     @Transactional(readOnly = true)
-    public List<EstoqueMinDto> findAllByUnidade(Long unidadeId) {
+    public List<EstoqueResumoDto> findAllByUnidade(Long unidadeId) {
         var estoque = estoqueRepository.findByUnidadeId(unidadeId);
         return estoqueMapper.toCollectionModel(estoque);
     }
