@@ -8,6 +8,7 @@ DELETE FROM tb_consentimento_lgpd;
 DELETE FROM tb_campanha_fidelidade_cliente;
 DELETE FROM tb_movimento_pontos;
 DELETE FROM tb_conta_fidelidade;
+DELETE FROM tb_item_pedido;
 DELETE FROM tb_pedido;
 DELETE FROM tb_cliente;
 DELETE FROM tb_estoque;
@@ -172,6 +173,19 @@ INSERT INTO tb_pedido (canal, status, data_hora, cliente_id, unidade_id) VALUES
 ('BALCAO', 'PRONTO', '2026-07-10', (SELECT id FROM tb_cliente WHERE nome = 'Pedro Oliveira'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Norte')),
 ('APP', 'CONFIRMADO', '2026-07-12', (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Centro')),
 ('PICKUP', 'EM_PREPARO', '2026-07-13', (SELECT id FROM tb_cliente WHERE nome = 'Carlos Lima'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Sul'));
+
+-- Itens dos pedidos
+INSERT INTO tb_item_pedido (pedido_id, preco_unitario, quantidade, produto_id) VALUES
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'João Silva') LIMIT 1), 25.90, 2, (SELECT id FROM tb_produto WHERE nome = 'Baião de Dois')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'João Silva') LIMIT 1), 10.00, 1, (SELECT id FROM tb_produto WHERE nome = 'Suco de Caju')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Maria Santos') LIMIT 1), 32.50, 1, (SELECT id FROM tb_produto WHERE nome = 'Carne de Sol')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Maria Santos') LIMIT 1), 11.00, 2, (SELECT id FROM tb_produto WHERE nome = 'Cartola')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Pedro Oliveira') LIMIT 1), 28.00, 1, (SELECT id FROM tb_produto WHERE nome = 'Sarapatel')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Pedro Oliveira') LIMIT 1), 18.90, 1, (SELECT id FROM tb_produto WHERE nome = 'Acarajé')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa') LIMIT 1), 15.50, 2, (SELECT id FROM tb_produto WHERE nome = 'Cuscuz')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa') LIMIT 1), 12.00, 1, (SELECT id FROM tb_produto WHERE nome = 'Tapioca')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Carlos Lima') LIMIT 1), 27.90, 1, (SELECT id FROM tb_produto WHERE nome = 'Baião de Dois')),
+((SELECT id FROM tb_pedido WHERE cliente_id = (SELECT id FROM tb_cliente WHERE nome = 'Carlos Lima') LIMIT 1), 8.00, 2, (SELECT id FROM tb_produto WHERE nome = 'Coco Verde'));
 
 -- Pagamentos
 INSERT INTO tb_pagamento (pedido_id, status, getway_externo, referencial_externa, data_hora_atualizacao) VALUES

@@ -1,15 +1,13 @@
 package com.uninter.raiazesdonordeste.usuario.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
 @Entity
+@Table(name = "tb_auditoria")
 public class Auditoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +16,8 @@ public class Auditoria {
     private String entidadeAfetada;
     private Date dataHora;
     private String detalhes;
-    private Long usuarioId;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuario usuario;
 }
