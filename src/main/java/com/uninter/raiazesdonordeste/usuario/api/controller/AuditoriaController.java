@@ -1,14 +1,14 @@
 package com.uninter.raiazesdonordeste.usuario.api.controller;
 
+import com.uninter.raiazesdonordeste.cardapio.api.Util.UriBuilder;
 import com.uninter.raiazesdonordeste.usuario.api.model.dto.auditoria.AuditoriaMaxDto;
 import com.uninter.raiazesdonordeste.usuario.api.model.dto.auditoria.AuditoriaResumoDto;
+import com.uninter.raiazesdonordeste.usuario.api.model.dto.request.AuditoriaPostDto;
 import com.uninter.raiazesdonordeste.usuario.domain.service.AuditoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +27,13 @@ public class AuditoriaController {
     public ResponseEntity<AuditoriaMaxDto> findById(@PathVariable Long id) {
         var auditoriaDto = auditoriaService.findById(id);
         return ResponseEntity.ok(auditoriaDto);
+    }
+
+    @PostMapping
+    public ResponseEntity<AuditoriaMaxDto> save(@RequestBody @Valid AuditoriaPostDto request) {
+        AuditoriaMaxDto response = auditoriaService.save(request);
+        var uri = UriBuilder.create(response.id());
+        return ResponseEntity.created(uri).body(response);
     }
 
     /* TODO

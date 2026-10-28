@@ -31,6 +31,7 @@ public class Pedido {
     @Transient
     private ApplicationEventPublisher eventPublisher;
 
+    //todo verificação se o retorno da logica no enum de status pedido nao é falsa
     public void aguardarPagamento() {
         this.status = StatusPedido.AGUARDANDO_PAGAMENTO;
         if (eventPublisher != null) {
