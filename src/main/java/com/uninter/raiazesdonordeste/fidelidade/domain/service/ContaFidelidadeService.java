@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContaFidelidadeService {
@@ -29,6 +30,11 @@ public class ContaFidelidadeService {
     @Transactional(readOnly = true)
     public ContaFidelidadeMaxDto findById(Long id) {
         return contaFidelidadeMapper.toModel(getContaFidelidadeOrElseThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ContaFidelidadeMaxDto> findByClienteId(Long clienteId) {
+        return contaFidelidadeRepository.findByClienteId(clienteId).map(contaFidelidadeMapper::toModel);
     }
 
     @Transactional

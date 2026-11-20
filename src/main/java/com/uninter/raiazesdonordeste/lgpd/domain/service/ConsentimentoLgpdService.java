@@ -27,6 +27,11 @@ public class ConsentimentoLgpdService {
     }
 
     @Transactional(readOnly = true)
+    public List<ConsentimentoLgpdResumoDto> findByClienteId(Long clienteId) {
+        return consentimentoLgpdMapper.toCollectionModel(consentimentoLgpdRepository.findByClienteId(clienteId));
+    }
+
+    @Transactional(readOnly = true)
     public ConsentimentoLgpdMaxDto findById(Long id) {
         return consentimentoLgpdMapper.toModel(getConsentimentoLgpdOrElseThrow(id));
     }

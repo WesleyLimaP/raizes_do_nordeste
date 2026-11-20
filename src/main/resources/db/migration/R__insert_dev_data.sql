@@ -168,7 +168,7 @@ INSERT INTO tb_consentimento_lgpd (cliente_id, tipo_consentimento, revogado, dat
 
 -- Pedidos
 INSERT INTO tb_pedido (canal, status, data_hora, cliente_id, unidade_id) VALUES
-('APP', 'ENTREGUE', '2026-07-01', (SELECT id FROM tb_cliente WHERE nome = 'João Silva'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Centro')),
+('APP', 'CRIADO', '2026-07-01', (SELECT id FROM tb_cliente WHERE nome = 'João Silva'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Centro')),
 ('TOTEM', 'ENTREGUE', '2026-07-05', (SELECT id FROM tb_cliente WHERE nome = 'Maria Santos'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Centro')),
 ('BALCAO', 'PRONTO', '2026-07-10', (SELECT id FROM tb_cliente WHERE nome = 'Pedro Oliveira'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Norte')),
 ('APP', 'CONFIRMADO', '2026-07-12', (SELECT id FROM tb_cliente WHERE nome = 'Ana Costa'), (SELECT id FROM tb_unidade WHERE nome = 'Unidade Centro')),

@@ -5,9 +5,11 @@ import com.uninter.raiazesdonordeste.pagamento.api.model.dto.request.PagamentoPo
 import com.uninter.raiazesdonordeste.pagamento.api.model.dto.request.PagamentoUpdateDto;
 import com.uninter.raiazesdonordeste.pagamento.api.model.dto.response.PagamentoMaxDto;
 import com.uninter.raiazesdonordeste.pagamento.api.model.dto.response.PagamentoResumoDto;
+import com.uninter.raiazesdonordeste.pagamento.api.model.dto.response.CheckoutSessionResponse;
 import com.uninter.raiazesdonordeste.pagamento.domain.service.PagamentoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +49,17 @@ public class PagamentoController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         pagamentoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<CheckoutSessionResponse> createCheckout(@RequestParam Long pedidoId) {
+        return ResponseEntity.ok(pagamentoService.createCheckoutSession(pedidoId));
+    }
+
+    @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> webhook(@RequestBody String payload,
+                                        @RequestHeader("Stripe-Signature") String signature) {
+        pagamentoService.handleWebhook(payload, signature);
+        return ResponseEntity.ok().build();
     }
 }

@@ -27,6 +27,11 @@ public class CampanhaFidelidadeService {
     }
 
     @Transactional(readOnly = true)
+    public List<CampanhaFidelidadeResumoDto> findByClienteId(Long clienteId) {
+        return campanhaFidelidadeMapper.toCollectionModel(campanhaFidelidadeRepository.findByClienteId(clienteId));
+    }
+
+    @Transactional(readOnly = true)
     public CampanhaFidelidadeMaxDto findById(Long id) {
         return campanhaFidelidadeMapper.toModel(getCampanhaFidelidadeOrElseThrow(id));
     }

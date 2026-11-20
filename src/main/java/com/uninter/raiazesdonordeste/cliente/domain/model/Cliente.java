@@ -1,15 +1,13 @@
 package com.uninter.raiazesdonordeste.cliente.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "tb_cliente")
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +16,12 @@ public class Cliente {
     private String email;
     private LocalDate dataNascimento;
     private String cpf;
+    @Transient
+    private java.util.List<Long> pedidosIds;
+    @Transient
+    private Long contaFidelidadeId;
+    @Transient
+    private java.util.List<Long> consentimentosLgpdIds;
+    @Transient
+    private java.util.List<Long> campanhasFidelidadeIds;
 }
