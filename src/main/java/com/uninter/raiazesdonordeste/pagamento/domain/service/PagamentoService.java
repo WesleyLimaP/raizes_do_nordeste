@@ -17,12 +17,14 @@ import com.uninter.raiazesdonordeste.pagamento.domain.repository.PagamentoReposi
 import com.uninter.raiazesdonordeste.pagamento.exceptions.PagamentoNotFoundException;
 import com.uninter.raiazesdonordeste.pedido.domain.model.ItemPedido;
 import com.uninter.raiazesdonordeste.pedido.domain.model.Pedido;
-import com.uninter.raiazesdonordeste.pedido.domain.model.StatusPedido;
+import com.uninter.raiazesdonordeste.pedido.domain.events.PedidoAguardandoPagamentoEvent;
+import com.uninter.raiazesdonordeste.pedido.domain.events.PedidoConfirmadoEvent;
 import com.uninter.raiazesdonordeste.pedido.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -39,13 +41,15 @@ public class PagamentoService {
     private final String stripeWebhookSecret;
     private final String checkoutSuccessUrl;
     private final String checkoutCancelUrl;
+    private final ApplicationEventPublisher eventPublisher;
 
     public PagamentoService(PagamentoRepository pagamentoRepository, PagamentoMapper pagamentoMapper,
                             PedidoRepository pedidoRepository,
                             @Value("${stripe.secret-key:}") String stripeSecretKey,
                             @Value("${stripe.webhook-secret:}") String stripeWebhookSecret,
                             @Value("${stripe.checkout.success-url}") String checkoutSuccessUrl,
-                            @Value("${stripe.checkout.cancel-url}") String checkoutCancelUrl) {
+                            @Value("${stripe.checkout.cancel-url}") String checkoutCancelUrl,
+                            ApplicationEventPublisher eventPublisher) {
         this.pagamentoRepository = pagamentoRepository;
         this.pagamentoMapper = pagamentoMapper;
         this.pedidoRepository = pedidoRepository;
@@ -53,6 +57,7 @@ public class PagamentoService {
         this.stripeWebhookSecret = stripeWebhookSecret;
         this.checkoutSuccessUrl = checkoutSuccessUrl;
         this.checkoutCancelUrl = checkoutCancelUrl;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional(readOnly = true)
@@ -122,6 +127,13 @@ public class PagamentoService {
             pagamento.setReferencialExterna(session.getId());
             pagamento.setDataHoraAtualizacao(new Date());
             pagamentoRepository.save(pagamento);
+            eventPublisher.publishEvent(new PedidoAguardandoPagamentoEvent(pedidoId));
+            com.stripe.model.Account conta = com.stripe.model.Account.retrieve(
+                    RequestOptions.builder().setApiKey(stripeSecretKey).build()
+            );
+
+            log.info("Conta Stripe usada pelo Spring Boot: {}", conta.getId());
+            log.info("Sessao Checkout criada: {}", session.getId());
             return new CheckoutSessionResponse(session.getId(), session.getUrl());
         } catch (StripeException exception) {
             throw new IllegalStateException("Nao foi possivel criar a sessao de pagamento Stripe", exception);
@@ -163,10 +175,8 @@ public class PagamentoService {
         pagamento.setStatus("APROVADO");
         pagamento.setDataHoraAtualizacao(new Date());
         pagamentoRepository.save(pagamento);
-        pedidoRepository.findById(pagamento.getPedidoId()).ifPresent(pedido -> {
-            pedido.setStatus(StatusPedido.CONFIRMADO);
-            pedidoRepository.save(pedido);
-        });
+        pedidoRepository.findById(pagamento.getPedidoId()).ifPresent(pedido ->
+                eventPublisher.publishEvent(new PedidoConfirmadoEvent(pedido.getId())));
     }
 
     private Pagamento criarPagamentoDoWebhook(Session session) {

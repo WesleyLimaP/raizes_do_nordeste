@@ -16,12 +16,19 @@ public enum StatusPedido {
     }
 
     public static boolean Isnext(StatusPedido statusAtual, StatusPedido statusFuturo) {
-        if (statusAtual == CANCELADO || statusAtual == null || statusFuturo == null) {
+        if (statusAtual == null || statusFuturo == null) {
             return false;
         }
-        return statusAtual.getIndice() < statusFuturo.getIndice() &&
-                statusFuturo.getIndice() - statusAtual.getIndice() == 1
-                || CANCELADO == statusFuturo;
+        if (statusAtual == statusFuturo) {
+            return true;
+        }
+        if (statusAtual == CANCELADO) {
+            return false;
+        }
+        if (statusFuturo == CANCELADO) {
+            return true;
+        }
+        return statusFuturo.getIndice() - statusAtual.getIndice() == 1;
     }
 
     private int getIndice() {

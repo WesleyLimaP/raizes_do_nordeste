@@ -79,14 +79,16 @@ public class PedidoService {
     @Transactional
     public PedidoMaxDto iniciarPreparo(Long id) {
         Pedido pedido = getPedidoOrElseThrow(id);
-        pedido.setStatus(StatusPedido.EM_PREPARO);
+        pedido.setEventPublisher(eventPublisher);
+        pedido.iniciarPreparo();
         return pedidoMapper.toModel(pedido);
     }
 
     @Transactional
     public PedidoMaxDto pronto(Long id) {
         Pedido pedido = getPedidoOrElseThrow(id);
-        pedido.setStatus(StatusPedido.PRONTO);
+        pedido.setEventPublisher(eventPublisher);
+        pedido.pronto();
         return pedidoMapper.toModel(pedido);
     }
 
